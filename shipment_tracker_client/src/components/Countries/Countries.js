@@ -1,0 +1,142 @@
+import { useState, useEffect } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useDispatch, useSelector } from 'react-redux';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import TextField from '@material-ui/core/TextField';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { fetchCountries, createCountry, updateCountry, deleteCountry } from '../../actions/countriesActions';
+import { PAGE_SIZE } from '../../constants/appConstants';
+
+function Countries() {
+  const dispatch = useDispatch();
+  const countries = useSelector(state => state.countries.data);
+  const [page, setPage] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingCountry, setEditingCountry] = useState(null);
+  const [name, setName] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [nameError, setNameError] = useState('');
+
+  useEffect(() => { dispatch(fetchCountries()); }, []);
+
+  if (countries === null) return <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><CircularProgress /></div>;
+
+  function openCreate() {
+    document.activeElement?.blur();
+    setEditingCountry(null);
+    setName('');
+    setDialogOpen(true);
+  }
+
+  function openEdit(country) {
+    document.activeElement?.blur();
+    setEditingCountry(country);
+    setName(country.name);
+    setDialogOpen(true);
+  }
+
+  function closeDialog() {
+    setDialogOpen(false);
+    setEditingCountry(null);
+    setNameError('');
+  }
+
+  async function handleSave() {
+    if (!name.trim()) {
+      setNameError('Country name is required.');
+      setTimeout(() => setNameError(''), 4000);
+      return;
+    }
+    if (editingCountry) {
+      const updated = await dispatch(updateCountry(editingCountry.id, name));
+      if (updated) closeDialog();
+    } else {
+      const created = await dispatch(createCountry(name));
+      if (created) closeDialog();
+    }
+  }
+
+  async function handleDelete() {
+    const success = await dispatch(deleteCountry(deleteConfirm.id));
+    if (success) setDeleteConfirm(null);
+  }
+
+  const safePage = Math.min(page, Math.max(0, Math.ceil(countries.length / PAGE_SIZE) - 1));
+  const pagedCountries = countries.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+
+  return (
+    <div style={{ width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', width: '100%' }}>
+        <h3 style={{ margin: 0 }}>Countries</h3>
+        <Button variant="contained" color="primary" onClick={openCreate}>Add</Button>
+      </div>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {countries.length === 0 && (
+            <TableRow><TableCell colSpan={2} align="center" style={{ color: '#888', padding: '2rem' }}>No countries found.</TableCell></TableRow>
+          )}
+          {pagedCountries.map(country => (
+            <TableRow key={country.id}>
+              <TableCell>{country.name}</TableCell>
+              <TableCell>
+                <IconButton size="small" onClick={() => openEdit(country)}><EditIcon /></IconButton>
+                <IconButton size="small" onClick={e => { e.currentTarget.blur(); setDeleteConfirm(country); }}><DeleteIcon /></IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TablePagination
+        component="div"
+        count={countries.length}
+        page={safePage}
+        onPageChange={(_, newPage) => setPage(newPage)}
+        rowsPerPage={PAGE_SIZE}
+        rowsPerPageOptions={[]}
+      />
+
+      <Dialog open={dialogOpen} onClose={closeDialog} fullWidth maxWidth="xs">
+        <DialogTitle>{editingCountry ? 'Edit Country' : 'Add Country'}</DialogTitle>
+        <DialogContent>
+          <TextField label="Name" fullWidth margin="normal" variant="outlined"
+            value={name} onChange={e => setName(e.target.value)}
+            error={!!nameError} helperText={nameError} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={handleSave} color="primary" variant="contained">Save</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)}>
+        <DialogTitle>Delete Country</DialogTitle>
+        <DialogContent>Are you sure you want to delete <strong>{deleteConfirm?.name}</strong>?</DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+          <Button onClick={handleDelete} color="secondary" variant="contained">Delete</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
+
+export default Countries;

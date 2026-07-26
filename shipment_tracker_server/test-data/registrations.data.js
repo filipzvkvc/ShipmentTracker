@@ -1,0 +1,57 @@
+const { REG_ATTR, CLIENT_ATTR, VEHICLE_TYPE_ATTR,
+      INSURANCE_COMP_ATTR, PAYMENT_TYPE_ATTR, USER_ATTR,
+      COMP_LINE_ATTR, EMPLOYEE_ATTR } = require('../constants/modelConstants');
+const C_CLIENTS = require('./clients.data')
+const C_VH_TYPE = require('./vehicleTypes.data');
+const C_INS_COMP = require('./insuranceCompanies.data');
+const C_PAY_TYPES = require('./paymentTypes.data');
+const C_USERS = require('./users.data');
+const C_COMP_LINES = require('./companyLines.data');
+const C_EMPLOYEES = require('./employees.data');
+
+
+const tempRegDate1 = new Date();
+const tempEndRegDate1 = new Date(tempRegDate1);
+tempEndRegDate1.setFullYear( tempEndRegDate1.getFullYear() + 1);
+
+const tempRegDate2 = new Date();
+const tempEndRegDate2 = new Date(tempRegDate2);
+tempEndRegDate1.setFullYear( tempEndRegDate2.getFullYear() + 1);
+
+
+module.exports = [
+  {
+    [REG_ATTR.REGISTRATION_ID] : 1,
+    [REG_ATTR.CLIENT_ID_FK] : C_CLIENTS[0][CLIENT_ATTR.CLIENT_ID],
+    [REG_ATTR.REGISTRATION_PLATE] : "NS832073",
+    [REG_ATTR.VEHICLE_TYPE_ID_FK] : C_VH_TYPE[0][VEHICLE_TYPE_ATTR.VEHICLE_TYPE_ID],
+    [REG_ATTR.INSURANCE_COMPANY_ID_FK] : C_INS_COMP[0][INSURANCE_COMP_ATTR.INSURANCE_COMPANY_ID],
+    [REG_ATTR.INSURANCE_PRICE] : "15000",
+    [REG_ATTR.AGENCY_SERVICE_PRICE] : "5000",
+    [REG_ATTR.PAYMENT_TYPE_ID_FK] : C_PAY_TYPES[0][PAYMENT_TYPE_ATTR.PAYMENT_TYPE_ID],
+    [REG_ATTR.REGISTRATION_DATE] : tempRegDate1.getTime(),
+    [REG_ATTR.REGISTRATION_EXP_DATE] : tempEndRegDate1.getTime(),
+    [REG_ATTR.USER_ID_FK] : C_USERS[1][USER_ATTR.USER_ID],
+    [REG_ATTR.COMPANY_LINE_ID_FK] : C_COMP_LINES[2][COMP_LINE_ATTR.COMPANY_LINE_ID],
+    [REG_ATTR.EMPLOYEE_ID_FK] : C_EMPLOYEES[0][EMPLOYEE_ATTR.EMPLOYEE_ID],
+    [REG_ATTR.ASSOCIATE] : "Mr. Djura",
+    [REG_ATTR.CORRECTNESS] : true
+  },
+  {
+    [REG_ATTR.REGISTRATION_ID] : 2,
+    [REG_ATTR.CLIENT_ID_FK] : C_CLIENTS[1][CLIENT_ATTR.CLIENT_ID],
+    [REG_ATTR.REGISTRATION_PLATE] : "NS34234",
+    [REG_ATTR.VEHICLE_TYPE_ID_FK] : C_VH_TYPE[6][VEHICLE_TYPE_ATTR.VEHICLE_TYPE_ID],
+    [REG_ATTR.INSURANCE_COMPANY_ID_FK] : C_INS_COMP[1][INSURANCE_COMP_ATTR.INSURANCE_COMPANY_ID],
+    [REG_ATTR.INSURANCE_PRICE] : "10000",
+    [REG_ATTR.AGENCY_SERVICE_PRICE] : "5000",
+    [REG_ATTR.PAYMENT_TYPE_ID_FK] : C_PAY_TYPES[1][PAYMENT_TYPE_ATTR.PAYMENT_TYPE_ID],
+    [REG_ATTR.REGISTRATION_DATE] : tempRegDate2.getTime(),
+    [REG_ATTR.REGISTRATION_EXP_DATE] : tempEndRegDate2.getTime(),
+    [REG_ATTR.USER_ID_FK] : C_USERS[1][USER_ATTR.USER_ID],
+    [REG_ATTR.COMPANY_LINE_ID_FK] : C_COMP_LINES[3][COMP_LINE_ATTR.COMPANY_LINE_ID],
+    [REG_ATTR.EMPLOYEE_ID_FK] : C_EMPLOYEES[1][EMPLOYEE_ATTR.EMPLOYEE_ID],
+    [REG_ATTR.ASSOCIATE] : "Mirko Associate",
+    [REG_ATTR.CORRECTNESS] : true
+  }
+];

@@ -1,0 +1,59 @@
+Installation guide
+===================
+(1)[optional] Remove package.json and node modules and install all packages from dependencies and dev dependencies manually for newest packages versions
+(2) Create user in database and grant permissions to him;
+    CREATE USER 'shipment_tracker' IDENTIFIED BY 'shipment_tracker';
+    GRANT ALL ON shipment_tracker_db.* TO 'shipment_tracker';
+    GRANT ALL ON shipment_tracker_db_test.* TO 'shipment_tracker';
+(3) Executre command line command (creates database, creates tables, seeds tables with test data)
+    npm run setup
+(4) Start server
+    npm run dev
+
+
+Database creation and usage
+===========================
+// Important: before using create user in database to match specified credentials in ./config/config.js and ./config/config.env
+//mysql (as root):
+    CREATE USER 'shipment_tracker' IDENTIFIED BY 'shipment_tracker';
+    GRANT ALL ON shipment_tracker_db.* TO 'shipment_tracker';
+    GRANT ALL ON shipment_tracker_db_test.* TO 'shipment_tracker';
+
+// Before testing you should create test database
+npx sequelize db:create --env test
+    
+
+Sequelize cli usage
+===================
+//create database
+npx sequelize db:create  
+//drop database
+npx sequelize db:drop
+// help
+//npx sequelize --help
+
+//run specified seed
+npx sequelize db:seed --seed 4352341-exampleSeed
+//undo last seed
+npx sequelize db:seed:undo
+//create new seed file
+npx sequelize seed:generate --name exampleSeed
+
+//run not executed migrations
+npx sequelize db:migrate
+//create migration
+npx sequelize migration:generate --name ExampleMigration
+
+Testing
+=======
+For testing maybe you want to disable token, or write logic the programmatically logs in
+Before use tests you need to create test database
+npx sequelize db:create --env test
+//run all test
+npm run test
+npm run test user
+npm run test auth
+
+Test data fill - seeding
+=========================
+npm run reseed

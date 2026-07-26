@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Isometric box — top face -->
+  <polygon points="50,42 78,57 50,72 22,57" fill="#3b82f6"/>
+  <!-- Left face -->
+  <polygon points="22,57 50,72 50,90 22,75" fill="#1e3a8a"/>
+  <!-- Right face -->
+  <polygon points="78,57 50,72 50,90 78,75" fill="#1d4ed8"/>
+
+  <!-- Strap — vertical -->
+  <polygon points="49,42 51,42 51,90 49,90" fill="#bfdbfe" opacity="0.4"/>
+  <!-- Strap — left diagonal -->
+  <polygon points="49,42 51,42 22,57 22,59" fill="#bfdbfe" opacity="0.3"/>
+  <!-- Strap — right diagonal -->
+  <polygon points="49,42 51,42 78,57 78,59" fill="#bfdbfe" opacity="0.3"/>
+
+  <!-- Location pin -->
+  <path d="M50,8 C43,8 37.5,13.5 37.5,20.5 C37.5,30 50,45 50,45 C50,45 62.5,30 62.5,20.5 C62.5,13.5 57,8 50,8 Z" fill="#f97316"/>
+  <circle cx="50" cy="20.5" r="7" fill="white"/>
+  <circle cx="50" cy="20.5" r="3.5" fill="#f97316"/>
+</svg>
